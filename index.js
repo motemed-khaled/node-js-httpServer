@@ -43,7 +43,8 @@ const groupWithCatogry = (allProduct , cur) => {
 const server = http.createServer((req, res) => {
     
     if (req.method === "GET") {
-        const cur = (req.url).split("=")[1]?.toUpperCase();
+        const cur = (req.url).split("=").at(-1)?.toUpperCase();
+        console.log(cur);
 
         (async () => {
             const [products, currency] =await Promise.all([
@@ -51,7 +52,7 @@ const server = http.createServer((req, res) => {
                 await axios.get("https://api.exchangerate.host/latest?base=USD")
             ]);
             let currencyPrice = currency.data.rates[`${cur}`] || 1;
-            let allProduct = products.data
+            let allProduct = products.data;
     
             let filterdProduct = groupWithCatogry(allProduct , currencyPrice);
             res.setHeader("content-type", "application/json");
@@ -75,7 +76,6 @@ const server = http.createServer((req, res) => {
                     let postResponse =await axios.post("https://api.escuelajs.co/api/v1/products/", newProduct, {
                     headers: { 'Content-Type': 'application/json' }
                     });
-                    console.log(postResponse.data);
                     res.setHeader("content-type", "application/json");
                     res.writeHead(201);
                     res.write(JSON.stringify(postResponse.data));
