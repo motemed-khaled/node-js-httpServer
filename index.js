@@ -43,8 +43,8 @@ const groupWithCatogry = (allProduct , cur) => {
 const server = http.createServer((req, res) => {
     
     if (req.method === "GET") {
-        const path = new URL(`http://localhost:5000${req.url}`);
-        let cur = path.searchParams.get("cur")?.toUpperCase();
+        const cur = (req.url).split("=")[1]?.toUpperCase();
+
         (async () => {
             const [products, currency] =await Promise.all([
                 await axios.get("https://api.escuelajs.co/api/v1/products"),
@@ -75,10 +75,11 @@ const server = http.createServer((req, res) => {
                     let postResponse =await axios.post("https://api.escuelajs.co/api/v1/products/", newProduct, {
                     headers: { 'Content-Type': 'application/json' }
                     });
+                    console.log(postResponse.data);
                     res.setHeader("content-type", "application/json");
                     res.writeHead(201);
                     res.write(JSON.stringify(postResponse.data));
-                    res.end()
+                    res.end();
                  })();
                
             } catch (error) {
