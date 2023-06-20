@@ -1,13 +1,20 @@
 import { products as data } from "../model/dataBase.js";
-import { object, string, number } from "yup";
+import { object, string, number, date, array } from "yup";
+import  moment  from "moment";
 import {uid} from "uid";
 
 
 let productSchema = object({
-    name: string().required(),
-    price: number().required().positive(),
-    image: string().url().nullable().required()
-});
+    title: string().required(),
+    price: number().positive(),
+    description: string(),
+    images: array(string().url()),
+    category: object({
+        id: number(),
+        name: string(),
+        image: string(),
+      })
+  });
 
 export let controller = (app) => {
     
@@ -28,21 +35,21 @@ export let controller = (app) => {
 
     app.post("/product", (req, res) => {
         let newProduct = productSchema.validateSync(req.body, { strict: true });
-        newProduct = { id: uid(4), ...newProduct }; 
+        newProduct = { id: uid(4), ...newProduct , created_at:moment().format("llll") , updtaed_at:moment().format("llll") }; 
         data.push(newProduct)
         res.status(201).json(newProduct)
     })
 
     app.put("/product/update/:id", (req, res) => {
         let updateProduct = productSchema.validateSync(req.body, { strict: true });
-        data.forEach(obj => {
-            if (obj.id == req.params.id) {
-                obj.name = updateProduct.name;
-                obj.price = updateProduct.price;
-                obj.image = updateProduct.image;
-                updateProduct = obj;
-            }
-        })
+        let productIndex = data.findIndex(obj => obj.id == req.params.id);
+        updateProduct = {
+            id: data[productIndex].id,
+            ...updateProduct,
+            created_at: data[productIndex].created_at,
+            updtaed_at: moment().format("llll")
+        }
+        data[productIndex] = updateProduct;
 
         res.json(updateProduct);
     })

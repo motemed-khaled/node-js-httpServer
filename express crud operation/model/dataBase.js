@@ -1,8 +1,13 @@
 export let products = [
     // {
-    //     id: "1511389801e",
-    //     name: "motemed",
-    //     price: 1222,
-    //     image: "https://placeimg.com/640/480/any?r=0.591926261873231"
-    // }
+    //     "title": "khaled",
+    //     "price": 300,
+    //     "description":"vvvvv",
+    //     "images": ["https://api.lorem.space/image/fashion?w=640&h=480&r=4278"],
+    //     "category": {
+    //       "id": 5,
+    //       "name": "gggggg",
+    //       "image": "https://api.lorem.space/image/fashion?w=640&h=480&r=4278"
+    //     }
+    //   }
 ];
