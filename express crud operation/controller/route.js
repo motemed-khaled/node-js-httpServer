@@ -43,6 +43,7 @@ export let controller = (app) => {
     app.put("/product/update/:id", (req, res) => {
         let updateProduct = productSchema.validateSync(req.body, { strict: true });
         let productIndex = data.findIndex(obj => obj.id == req.params.id);
+        if (productIndex == -1) throw new Error("No Data Match In Database....") 
         updateProduct = {
             id: data[productIndex].id,
             ...updateProduct,
@@ -56,7 +57,7 @@ export let controller = (app) => {
 
     app.delete("/product/delete/:id", (req, res) => {
         let productIndex = data.findIndex(obj => obj.id == req.params.id);
-        if (productIndex == -1) throw new Error("no products match in dataBase...")
+        if (productIndex == -1) throw new Error("No Data Match In Database....")
         data.splice(productIndex, 1);
         res.json(data);
     })
